@@ -9,5 +9,6 @@ pipeline {
             steps {
                 sh 'flask --version'
             }
+        }
     }
 }
