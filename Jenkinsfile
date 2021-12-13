@@ -4,10 +4,16 @@ pipeline {
     agent none
 
     stages{
-        stage('Build image'){
-            agent { dockerfile true }
+        stage('build image') {
             steps {
-                sh 'flask --version'
+                script {
+                    echo "building the docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'Dawei-Dockerhub-Credential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t $USER/microblog:0.0.1 ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin "
+                        sh "docker push $USER/microblog:0.0.1"
+                    }
+                }
             }
         }
     }
