@@ -19,9 +19,9 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'Dawei-Dockerhub-Credential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t $USER/$appName:$Version ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin "
-                        sh "docker push $USER/$appName:$Version"
+                        sh 'docker build -t $USER/$appName:$Version .'
+                        sh 'echo $PASS | docker login -u $USER --password-stdin '
+                        sh 'docker push $USER/$appName:$Version'
                     }
                 }
             }
