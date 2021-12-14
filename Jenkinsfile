@@ -4,6 +4,15 @@ pipeline {
     agent any
 
     stages{
+        stage ('get version number') {
+            steps {
+                echo 'Getting version of microblog'
+                echo 'python setup.py --version'
+
+                sh 'echo python setup.py --version > $WORKSPACE/env.Version'
+            }
+        }
+
         stage('build image') {
             steps {
                 script {
