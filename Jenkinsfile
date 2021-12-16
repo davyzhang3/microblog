@@ -15,7 +15,7 @@ pipeline {
         }
 
         stage ('test') {
-            stpes {
+            steps {
                 echo 'Testing the code'
                 sh 'pytest microblog.py'
             }
