@@ -2,21 +2,11 @@
 
 pipeline {
     agent any
-    options {
-        // This is required if you want to clean before build
-        skipDefaultCheckout(true)
-    }
     environment {
         appName = sh (returnStdout: true, script: 'python3 setup.py --name').trim()
         Version = sh (returnStdout: true, script: 'python3 setup.py --version').trim()
     }
     stages{
-        stage ('clean workspace') {
-            steps {
-                // clean workspace
-                cleanWs()
-            }
-        }
         stage ('get info') {
             steps {
                 checkout scm
@@ -90,5 +80,10 @@ pipeline {
         // stage ('install Prometheus') {
 
         // }
+    }
+    post { 
+        always { 
+            cleanWs()
+        }
     }
 }
