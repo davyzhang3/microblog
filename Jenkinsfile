@@ -17,7 +17,7 @@ pipeline {
         stage ('test') {
             steps {
                 echo 'Testing the code'
-                sh 'pytest microblog.py'
+                
             }
         }
         
@@ -51,8 +51,8 @@ pipeline {
                 // varaible names have to be AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
                 // Create a secret texts for AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY respectively. 
                 // reference: https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#for-other-credential-types
-                AWS_ACCESS_KEY_ID = Credentials('jenkins-aws-secret-key-id')
-                AWS_SECRET_ACCESS_KEY = Credentials('jenkins-aws-secret-access-key')
+                AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
+                AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
                 TF_VAR_env_prefix = 'test'
             }
             steps {
