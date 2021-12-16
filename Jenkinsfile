@@ -68,14 +68,14 @@ pipeline {
                 }
             }
         }
-        stage('deploy on EKS') {
-            steps {
+        // stage('deploy on EKS') {
+        //     steps {
 
-            }
-        }
+        //     }
+        // }
 
-        stage ('install Prometheus') {
-            
-        }
+        // stage ('install Prometheus') {
+
+        // }
     }
 }
