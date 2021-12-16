@@ -72,11 +72,11 @@ pipeline {
                     dir('terraform') {
                         sh "terraform init"
                         sh "terraform apply --auto-approve"
-                        EKS-CLUSTER-ID = sh(
+                        EKS_CLUSTER_ID = sh(
                             script: "terraform output eks-cluster-id",
                             returnStdout: true
                         ).trim()
-                        echo "${EKS-CLUSTER-ID}"
+                        echo "${EKS_CLUSTER_ID}"
                     }
                 }
             }
