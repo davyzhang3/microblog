@@ -79,10 +79,11 @@ pipeline {
             steps {
                 echo "update config file for kubernetes"
                 sh "aws eks update-kubeconfig --name $EKS_CLUSTER_ID --region us-east-1"
+                
                 script {
                     dir('kubernetes') {
-                        sh "kubectl apply myapp-micoblog.yaml"
-                        sh "kubectl apply myapp-mysql.yaml"
+                        sh "kubectl apply -f myapp-mysql.yaml"
+                        sh "kubectl apply -f myapp-microblog.yaml"
 
                         echo "waiting for my app to initialize"
                         sleep(time: 120, unit: "SECONDS")
@@ -103,10 +104,17 @@ pipeline {
 
             }
         }
-
-        // stage ('install Prometheus') {
-
-        // }
+        // make sure you have helm installed on Jenkins server
+        stage ('deploy Prometheus') {
+            steps {
+                sh ''' helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                kubectl create namespace monitoring
+                helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring
+                '''
+                sleep(time: 120, unit: "SECONDS")
+                sh '''kubectl get all -n monitoring'''
+            }
+        }
     }
     post { 
         always { 
