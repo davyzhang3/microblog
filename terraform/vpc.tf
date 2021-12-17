@@ -53,17 +53,17 @@ module "EKS-lab-vpc" {
 
   tags = {
       # this tag is for consumption of Kubernetes Cloud Control Manager
-      "kubernetes.io/cluster/EKS-lab-cluster" = "shared"
+      "kubernetes.io/cluster/EKS-lab" = "shared"
   }
 
   public_subnet_tags = {
-      "kubernetes.io/cluster/EKS-lab-cluster" = "shared"
+      "kubernetes.io/cluster/EKS-lab" = "shared"
       # elb stands for elastic load balancer. It's an entry point of a cluster from the outside. It's open to external request
       "kubernetes.ip/role/elb" = 1
   }
 
   private_subnet_tags = {
-      "kubernetes.io/cluster/EKS-lab-cluster" = "shared"
+      "kubernetes.io/cluster/EKS-lab" = "shared"
       # internal elb makes it not open to the public
       "kubernetes.ip/role/internal-elb" = 1
   }

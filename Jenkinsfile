@@ -5,6 +5,8 @@ pipeline {
     environment {
         appName = sh (returnStdout: true, script: 'python3 setup.py --name').trim()
         Version = sh (returnStdout: true, script: 'python3 setup.py --version').trim()
+        AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
     }
     stages{
         stage ('get info') {
@@ -71,11 +73,36 @@ pipeline {
                 }
             }
         }
-        // stage('deploy on EKS') {
-        //     steps {
+        // download AWS CLI, kubectl in Jenkins server before applying
+        // https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+        stage('deploy on EKS') {
+            steps {
+                echo "update config file for kubernetes"
+                sh "aws eks update-kubeconfig --name $EKS_CLUSTER_ID --region us-east-1"
+                script {
+                    dir('kubernetes') {
+                        sh "kubectl apply myapp-micoblog.yaml"
+                        sh "kubectl apply myapp-mysql.yaml"
 
-        //     }
-        // }
+                        echo "waiting for my app to initialize"
+                        sleep(time: 120, unit: "SECONDS")
+
+                        EKS_IP = sh(
+                            script: "kubectl get service/microblog-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}'",
+                            returnStdout: true
+                        ).trim()
+
+                        EKS_IP_PORT = sh(
+                            script: "kubectl get service/microblog-service --output jsonpath='{.spec.ports[0].port}'",
+                            returnStdout: true
+                        ).trim()
+                        echo "The IP address of your web app is $EKS_IP:$EKS_IP_PORT"
+                    }
+                }
+                
+
+            }
+        }
 
         // stage ('install Prometheus') {
 
