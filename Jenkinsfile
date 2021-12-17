@@ -114,7 +114,7 @@ pipeline {
                 sh 'kubectl create namespace monitoring --dry-run=client -o yaml| kubectl apply -f - '
                 sh 'helm upgrade --install monitoring prometheus-community/kube-prometheus-stack -n monitoring'
                 sleep(time: 120, unit: "SECONDS")
-                }
+                
                 sh '''kubectl get all -n monitoring'''
             }
         }
