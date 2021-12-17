@@ -107,11 +107,14 @@ pipeline {
         // make sure you have helm installed on Jenkins server
         stage ('deploy Prometheus') {
             steps {
-                sh ''' helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-                kubectl create namespace monitoring
-                helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring
-                '''
+                sh 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+                // create namespace of monitoring with yaml file to make this script become idempotent
+                // --dry-run: only print the object that would be sent, without sending it
+                // helm upgrade --install: It installs the charts if they are not already installed. If they are already installed, it upgrades them.
+                sh 'kubectl create namespace monitoring --dry-run=client -o yaml| kubectl apply -f - '
+                sh 'helm upgrade --install monitoring prometheus-community/kube-prometheus-stack -n monitoring'
                 sleep(time: 120, unit: "SECONDS")
+                }
                 sh '''kubectl get all -n monitoring'''
             }
         }
