@@ -3,6 +3,7 @@
 pipeline {
     agent any
     environment {
+        // Environment variables in this section are globall
         appName = sh (returnStdout: true, script: 'python3 setup.py --name').trim()
         Version = sh (returnStdout: true, script: 'python3 setup.py --version').trim()
         AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')

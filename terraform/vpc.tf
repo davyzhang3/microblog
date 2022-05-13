@@ -68,3 +68,6 @@ module "EKS-lab-vpc" {
       "kubernetes.ip/role/internal-elb" = 1
   }
 }
+
+# problems that you might have: there is a ELB and a security group that attached to the vpc which leaves the terraform destroy hanging
+# The only way to solve that problem is removing the ELB and SG manually.

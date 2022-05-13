@@ -1,13 +1,37 @@
-version: "2"
+version: "3"
 services:
 
   db:
-    image: mysql:5.7
-    container_name: "MySQL_Database2"
+    image: junglepolice/mysql:0.0.1
+    container_name: "MySQL_Database1"
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
-      
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - new
+    healthcheck:
+      test: "exit 0"
+
+  
+  web-app:
+    image: junglepolice/microblog:0.0.1
+    container_name: "web-app"
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - new
+    environment:
+      # @localhost becomes @db
+      - DATABASE_URL=mysql+mysqlconnector://root:root@db:3306/db
+
+networks:
+  new:
+    driver: bridge
+
+
+
+
