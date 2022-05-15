@@ -1,0 +1,11 @@
+appName: microblog
+appImage: junglepolice/microblog
+appVersion: 0.2.0
+appReplicas: 1
+containerPort: 5000
+containerEnvVars:
+- key: DATABASE_URL
+  value: "mysql+mysqlconnector://root:root@mysql-service:3306/db"
+
+servicePort: 5000
+serviceType: LoadBalancer

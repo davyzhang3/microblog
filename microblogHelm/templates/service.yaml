@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microblog-service
+spec:
+  selector:
+    app: {{ .Values.appName}} # creates a connection between service and deployment or pods in deployment
+  type: {{ .Values.serviceType }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.servicePort}}
+      targetPort: {{ .Values.containerPort}}

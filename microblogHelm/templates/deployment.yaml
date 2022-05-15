@@ -1,0 +1,30 @@
+apiVersion: apps/v1 # different components use different api version, so look it up.
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }} # deployment name
+  labels:
+    app: {{ .Values.appName }}  # this label will be selected by Service
+spec:
+  replicas: {{ .Values.appReplicas }}
+  selector: # find
+    matchLabels:
+      app: {{ .Values.appName}} 
+  template: # this configuration applies to a Pod
+    metadata:
+      labels:
+        app: {{ .Values.appName }} # creates a key value pair  'app: mongodb' so that deployment can create a connection to the pod that matches with this pair
+    spec:  # blueprint of a pod
+      containers:
+      - name: {{ .Values.appName }} # container name
+        image: "{{ .Values.appImage }}:{{ .Values.appVersion}}" # use double quotes around two placeholders to make it work.
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        env:
+        {{- range .Values.containerEnvVars}} # for loop in yaml
+        - name: {{ .key }}
+          value: {{ .value | quote}} # force the value to be a string (put double quotes around the value)
+          {{- end}}
+
+---
+
+
