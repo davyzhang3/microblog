@@ -17,28 +17,32 @@ data "aws_eks_cluster_auth" "EKS-lab-cluster"{
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.22.0"
+  version = "~> 18.0"
   # insert the 7 required variables here
 
   cluster_version = "1.21"
-  cluster_name    = "EKS-lab"
+  cluster_name    = "EKS-Lab"
   # get vpc_id, subnets from VPC module
-  vpc_id          = module.EKS-lab-vpc.vpc_id
-  subnets         = module.EKS-lab-vpc.private_subnets
+  vpc_id          = module.EKS-Lab-vpc.vpc_id
+  subnet_ids      = module.EKS-Lab-vpc.private_subnets
 
   tags = {
       environment = "lab"
-      application = "mongodb"
+      application = "myApp"
   }
 
-  worker_groups = [
-      {
-          # instance type, name of worker groups, number of instances
-          instance_type = "t2.small"
-          name = "EKS-Lab-Node_Group"
-          asg_desired_capacity = 3
-      }
-  ]
+
+    # EKS Managed Node Group(s)
+  eks_managed_node_groups = {
+    blue = {}
+    green = {
+      min_size     = 1
+      max_size     = 3
+      desired_size = 2
+
+      instance_types = ["t2.small"]
+    }
+  }
 }
 
 output "eks-cluster-id" {

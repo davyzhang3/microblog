@@ -33,12 +33,12 @@ data "aws_availability_zones" "azs" {
     exclude_names = ["us-east-1e"]
 }
 
-module "EKS-lab-vpc" {
+module "EKS-Lab-vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.10.0"
   # insert the 21 required variables here
 
-  name = "EKS-lab-vpc"
+  name = "EKS-Lab-vpc"
   cidr = var.vpc_cidr_block
   private_subnets = var.private_subnet_cidr_blocks
   public_subnets = var.public_subnet_cidr_blocks
@@ -53,17 +53,17 @@ module "EKS-lab-vpc" {
 
   tags = {
       # this tag is for consumption of Kubernetes Cloud Control Manager
-      "kubernetes.io/cluster/EKS-lab" = "shared"
+      "kubernetes.io/cluster/EKS-Lab" = "shared"
   }
 
   public_subnet_tags = {
-      "kubernetes.io/cluster/EKS-lab" = "shared"
+      "kubernetes.io/cluster/EKS-Lab" = "shared"
       # elb stands for elastic load balancer. It's an entry point of a cluster from the outside. It's open to external request
       "kubernetes.ip/role/elb" = 1
   }
 
   private_subnet_tags = {
-      "kubernetes.io/cluster/EKS-lab" = "shared"
+      "kubernetes.io/cluster/EKS-Lab" = "shared"
       # internal elb makes it not open to the public
       "kubernetes.ip/role/internal-elb" = 1
   }
