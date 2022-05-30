@@ -20,7 +20,7 @@ module "eks" {
   version = "~> 18.0"
   # insert the 7 required variables here
 
-  cluster_version = "1.21"
+  cluster_version = "1.22"
   cluster_name    = "EKS-Lab"
   # get vpc_id, subnets from VPC module
   vpc_id          = module.EKS-Lab-vpc.vpc_id
