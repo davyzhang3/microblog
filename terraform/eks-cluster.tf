@@ -1,19 +1,19 @@
-# the process of creating a EKS cluster takes about 15 mins
-provider "kubernetes" {
-    host = data.aws_eks_cluster.EKS-lab-cluster.endpoint
-    token = data.aws_eks_cluster_auth.EKS-lab-cluster.token
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKS-lab-cluster.certificate_authority[0].data)
-}
+# # the process of creating a EKS cluster takes about 15 mins
+# provider "kubernetes" {
+#     host = data.aws_eks_cluster.EKS-Lab-cluster.endpoint
+#     token = data.aws_eks_cluster_auth.EKS-Lab-cluster.token
+#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKS-Lab-cluster.certificate_authority[0].data)
+# }
 
-# provide or query aws_eks_cluster with this id
-data "aws_eks_cluster" "EKS-lab-cluster"{
-  name = module.eks.cluster_id
-}
+# # provide or query aws_eks_cluster with this id
+# data "aws_eks_cluster" "EKS-Lab-cluster"{
+#   name = module.eks.cluster_id
+# }
 
-# give an object which includes token
-data "aws_eks_cluster_auth" "EKS-lab-cluster"{
-  name = module.eks.cluster_id
-}
+# # give an object which includes token
+# data "aws_eks_cluster_auth" "EKS-Lab-cluster"{
+#   name = module.eks.cluster_id
+# }
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
